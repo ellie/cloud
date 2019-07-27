@@ -21,15 +21,13 @@ usermod -aG sudo elm
 chsh -s /bin/zsh elm
 
 # setup rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 ### ELM ###
-su elm
+su -u elm -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh && \
+	cargo install lsd bat && \
+	git clone https://github.com/ellmh/dotfiles && \
+	cd dotfiles && ./install"
 
-cargo install lsd bat
-
-git clone https://github.com/ellmh/dotfiles
-cd dotfiles && ./install
 
 # finally add and pair krypton!
 

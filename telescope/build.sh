@@ -15,7 +15,9 @@ IP=$(doctl compute droplet list --output json | jq -r '.[] | select(.name|test("
 echo "Server running at $IP"
 
 # No, I don't really want to use ansible.
-echo "Running setup"
+echo "Running setup after 15s"
+
+sleep 15
 
 scp ./setup.sh root@$IP:/root/setup.sh
 
