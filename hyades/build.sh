@@ -17,30 +17,33 @@ doctl kubernetes cluster kubeconfig save hyades
 # we need to make sure that the domain points to the load balancer at least!
 # Issue being that there is no LB, and k8s likes to manage that itself. 
 
-echo "Setting up nginx ingress and load balancer\n"
+echo "\nSetting up nginx ingress and load balancer\n"
 # create nginx ingress and LB
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud-generic.yaml
 
+echo "\nSleeping for 30s to allow for LB acquisition\n"
+sleep 30
+
 # look! a lb!
 LB_IP=$(kubectl get svc --namespace=ingress-nginx | tail -n 1 | awk '{print $4}')
-echo "Setting hyades.cloud to point to $LB_IP\n"
+echo "\nSetting hyades.cloud to point to $LB_IP\n"
 
 pushd ../dns && terraform init && terraform apply -var="hyades_lb=$LB_IP" && popd
 
-echo "Installing cert-manager\n"
+echo "\nInstalling cert-manager\n"
 kubectl create namespace cert-manager
 kubectl label namespace cert-manager certmanager.k8s.io/disable-validation=true
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v0.8.1/cert-manager.yaml
 
-echo "Sleeping for 30s to ensure everything is UP\n"
+echo "\nSleeping for 30s to ensure everything is UP\n"
 sleep 30
 
-echo "Installing cluster issuer\n"
+echo "\nInstalling cluster issuer\n"
 kubectl apply -f k8s/cluster-issuer.yaml
 
-echo "Installing the echo server\n"
+echo "\nInstalling the echo server\n"
 kubectl apply -f k8s/echoserver.yaml
 
-echo "Installing the ingress resource\n"
+echo "\nInstalling the ingress resource\n"
 kubectl apply -f k8s/ingress.yaml
