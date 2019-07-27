@@ -19,4 +19,4 @@ echo "Running setup"
 
 scp ./setup.sh root@$IP:/root/setup.sh
 
-ssh -t root@$IP "./setup.sh"
+ssh -t root@$IP "chmod +x ./setup.sh && ./setup.sh"

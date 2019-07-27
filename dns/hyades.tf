@@ -12,6 +12,10 @@
 # We can call this from a script, and tell terraform to point the root domain to
 # a new LB address
 
+variable cloudflare_token {}
+variable cloudflare_email {}
+variable hyades_lb {}
+
 provider "cloudflare" {
   email = "${var.cloudflare_email}"
   token = "${var.cloudflare_token}"
@@ -28,7 +32,7 @@ resource "cloudflare_record" "hyades_root" {
 resource "cloudflare_record" "hyades_cname" {
   domain = "hyades.cloud"
   name   = "*.hyades.cloud"
-  value  = "${var.hyades_lb}"
+  value  = "hyades.cloud"
   type   = "CNAME"
   ttl    = 3600
 }

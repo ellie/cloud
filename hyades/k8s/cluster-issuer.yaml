@@ -1,0 +1,13 @@
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-clusterissuer
+  namespace: cert-manager
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: e@elm.sh
+    privateKeySecretRef:
+      name: letsencrypt-clusterissuer
+    http01: {}

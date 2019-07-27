@@ -1,4 +1,5 @@
 variable "do_token" {}
+variable "server_name" {}
 
 variable "region" {
   type = string
